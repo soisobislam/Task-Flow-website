@@ -58,6 +58,8 @@ COPY --from=vendor /app/vendor ./vendor
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
+RUN test -f public/build/manifest.json
+
 RUN php artisan package:discover --ansi
 
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \

@@ -38,6 +38,8 @@ php artisan serve
 
 Open `http://localhost:8000`. To use MySQL, set `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` in `.env` before migrating.
 
+For Render, set both `APP_URL` and `ASSET_URL` to the exact HTTPS URL shown by Render, without a trailing slash. After changing either value, trigger a new deploy so Laravel rebuilds its cached configuration and generates CSS/JavaScript links for the correct host.
+
 ## Testing
 
 ```bash
