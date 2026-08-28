@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->create(['name' => 'Avery Admin', 'email' => 'admin@example.com', 'role' => 'admin', 'password' => Hash::make('password')]);
-        $manager = User::factory()->create(['name' => 'Morgan Manager', 'email' => 'manager@example.com', 'role' => 'manager', 'password' => Hash::make('password')]);
-        $employee = User::factory()->create(['name' => 'Elliot Employee', 'email' => 'employee@example.com', 'role' => 'employee', 'password' => Hash::make('password')]);
+        $admin = User::updateOrCreate(['email' => 'admin@example.com'], ['name' => 'Avery Admin', 'role' => 'admin', 'password' => Hash::make('password')]);
+        $manager = User::updateOrCreate(['email' => 'manager@example.com'], ['name' => 'Morgan Manager', 'role' => 'manager', 'password' => Hash::make('password')]);
+        $employee = User::updateOrCreate(['email' => 'employee@example.com'], ['name' => 'Elliot Employee', 'role' => 'employee', 'password' => Hash::make('password')]);
 
-        $project = Project::create([
+        $project = Project::firstOrCreate(['name' => 'Website refresh'], [
             'name' => 'Website refresh',
             'description' => 'A focused refresh of the public website experience.',
             'manager_id' => $manager->id,
@@ -31,8 +31,8 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
         ]);
 
-        $project->members()->attach([$employee->id]);
-        Task::create(['project_id' => $project->id, 'assigned_to' => $employee->id, 'created_by' => $manager->id, 'title' => 'Audit current pages', 'description' => 'Capture the baseline before implementation.', 'priority' => 'high', 'status' => 'in_progress', 'deadline' => now()->addDays(7)->toDateString()]);
-        Task::create(['project_id' => $project->id, 'created_by' => $manager->id, 'title' => 'Draft content map', 'description' => 'Outline the new information structure.', 'priority' => 'medium', 'status' => 'todo', 'deadline' => now()->addDays(14)->toDateString()]);
+        $project->members()->syncWithoutDetaching([$employee->id]);
+        Task::firstOrCreate(['project_id' => $project->id, 'title' => 'Audit current pages'], ['assigned_to' => $employee->id, 'created_by' => $manager->id, 'description' => 'Capture the baseline before implementation.', 'priority' => 'high', 'status' => 'in_progress', 'deadline' => now()->addDays(7)->toDateString()]);
+        Task::firstOrCreate(['project_id' => $project->id, 'title' => 'Draft content map'], ['created_by' => $manager->id, 'description' => 'Outline the new information structure.', 'priority' => 'medium', 'status' => 'todo', 'deadline' => now()->addDays(14)->toDateString()]);
     }
 }

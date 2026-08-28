@@ -39,3 +39,6 @@ services:
         value: database
       - key: FILESYSTEM_DISK
         value: local
+      - key: RUN_DEMO_SEED
+        value: "true"
+

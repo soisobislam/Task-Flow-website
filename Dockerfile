@@ -70,4 +70,4 @@ USER www-data
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan optimize && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+CMD ["sh", "-c", "php artisan migrate --force && if [ \"${RUN_DEMO_SEED:-false}\" = \"true\" ]; then php artisan db:seed --force; fi && php artisan optimize && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
