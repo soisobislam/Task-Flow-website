@@ -28,3 +28,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/{task}', [\App\Http\Controllers\TaskController::class, 'show'])->name('tasks.show');
     Route::patch('/tasks/{task}/status/{status}', [\App\Http\Controllers\TaskController::class, 'updateStatus'])->name('tasks.status');
 });
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/setup-admin', function () {
+    Artisan::call('db:seed', [
+        '--class' => 'DatabaseSeeder',
+        '--force' => true,
+    ]);
+
+    return 'Database seeded successfully.';
+});
